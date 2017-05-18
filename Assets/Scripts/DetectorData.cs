@@ -28,6 +28,7 @@ public class DetectorData : MonoBehaviour {
 			MainInstantiation.activePiece = null;
 			MainInstantiation.board[activeDetector.GetComponent<DetectorData>().column,
 			 												activeDetector.GetComponent<DetectorData>().row] = null;
+			activeDetector.GetComponent<DetectorData>().assignedPiece = null;
 			activeDetector = null;
 			// Remove Board to Captured Piece
 			if (assignedPiece == null) {
@@ -45,7 +46,7 @@ public class DetectorData : MonoBehaviour {
 		var pieceData = piece.GetComponent<PieceData>();
 		var detectors = MainInstantiation.detectors;
 
-		if (MainInstantiation.activePiece == null && piece.GetComponent<PieceData>().Base != null) {
+		if (MainInstantiation.activePiece == null && piece.GetComponent<PieceData>().Base != null && MainInstantiation.board[column, row] == piece.gameObject) {
 			if (MainInstantiation.isWhite(piece.gameObject) == "true" && MainInstantiation.turn) return;
 			if (MainInstantiation.isWhite(piece.gameObject) == "false" && !MainInstantiation.turn) return;
 

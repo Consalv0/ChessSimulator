@@ -41,7 +41,13 @@ public class PieceData : MonoBehaviour {
 			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}
 
-		if (distanceOfBase > 1.5f && isMoving == false) {
+		if (distanceOfBase > 1.5f && isMoving == false && Base != null) {
+			transform.position = getBasePosition();
+			transform.rotation = Quaternion.identity;
+			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
+		}
+
+		if (distanceOfBase > 14 && Base == null) {
 			transform.position = getBasePosition();
 			transform.rotation = Quaternion.identity;
 			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -58,6 +64,6 @@ public class PieceData : MonoBehaviour {
 		if (Base != null) {
 			return Base.transform.position;
 		}
-		return transform.position;
+		return Vector3.zero;
 	}
 }
