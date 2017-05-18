@@ -13,6 +13,7 @@ public class Instantiation : MonoBehaviour {
 	public Material JadeTexture;
 	public GameObject activePiece = null;
 	public GameObject activeDetector = null;
+	public bool turn;
 
 	public GameObject[,] detectors;
 	public GameObject[,] board;
@@ -63,21 +64,25 @@ public class Instantiation : MonoBehaviour {
 					whitePieces[j].transform.position = detectors[i, j].transform.position;
 					board[j, i] = whitePieces[j];
 					whitePieces[j].GetComponent<PieceData>().Base = detectors[i, j];
+					detectors[i, j].GetComponent<DetectorData>().assignedPiece = whitePieces[j];
 				}
 				if (i == 0) {
 					whitePieces[j + 8].transform.position = detectors[i, j].transform.position;
 					board[j, i] = whitePieces[j + 8];
 					whitePieces[j + 8].GetComponent<PieceData>().Base = detectors[i, j];
+					detectors[i, j].GetComponent<DetectorData>().assignedPiece = whitePieces[j + 8];
 				}
 				if (i == 6) {
 					blackPieces[j].transform.position = detectors[i, j].transform.position;
 					board[j, i] = blackPieces[j];
 					blackPieces[j].GetComponent<PieceData>().Base = detectors[i, j];
+					detectors[i, j].GetComponent<DetectorData>().assignedPiece = blackPieces[j];
 				}
 				if (i == 7) {
 					blackPieces[j + 8].transform.position = detectors[i, j].transform.position;
 					board[j, i] = blackPieces[j + 8];
 					blackPieces[j + 8].GetComponent<PieceData>().Base = detectors[i, j];
+					detectors[i, j].GetComponent<DetectorData>().assignedPiece = blackPieces[j + 8];
 				}
 		} }
 	}

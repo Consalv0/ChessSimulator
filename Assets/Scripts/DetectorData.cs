@@ -6,12 +6,12 @@ public class DetectorData : MonoBehaviour {
 	public int row;
 	public int column;
 	public bool acceptsMove = false;
+	public GameObject assignedPiece;
 
 	public GameObject MainSource;
 
 	void OnTriggerEnter(Collider piece) {
 		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
-		var pieceData = piece.GetComponent<PieceData>();
 		var detectors = MainInstantiation.detectors;
 		var activeDetector = MainInstantiation.activeDetector;
 
@@ -24,11 +24,19 @@ public class DetectorData : MonoBehaviour {
 			// Set New Base To The Piece and Add It To The Board
 			MainInstantiation.board[column, row] = piece.gameObject;
 			piece.GetComponent<PieceData>().Base = transform.gameObject;
-			// Remove Old Position -TODO Remove Board to Captured Piece
+			// Remove Old Position
 			MainInstantiation.activePiece = null;
 			MainInstantiation.board[activeDetector.GetComponent<DetectorData>().column,
 			 												activeDetector.GetComponent<DetectorData>().row] = null;
 			activeDetector = null;
+			// Remove Board to Captured Piece
+			if (assignedPiece == null) {
+				assignedPiece = piece.gameObject;
+			} else if (piece.gameObject != assignedPiece) {
+				assignedPiece.GetComponent<PieceData>().Base = null;
+				assignedPiece = piece.gameObject;
+			}
+			MainInstantiation.turn = !MainInstantiation.turn;
 		}
   }
 
@@ -37,7 +45,10 @@ public class DetectorData : MonoBehaviour {
 		var pieceData = piece.GetComponent<PieceData>();
 		var detectors = MainInstantiation.detectors;
 
-		if (MainInstantiation.activePiece == null) {
+		if (MainInstantiation.activePiece == null && piece.GetComponent<PieceData>().Base != null) {
+			if (MainInstantiation.isWhite(piece.gameObject) == "true" && MainInstantiation.turn) return;
+			if (MainInstantiation.isWhite(piece.gameObject) == "false" && !MainInstantiation.turn) return;
+
 			MainInstantiation.activePiece = piece.gameObject;
 			int[,] posibleMoves = MainInstantiation.getPosibleMoves(pieceData.type, pieceData.color, column, row);
 

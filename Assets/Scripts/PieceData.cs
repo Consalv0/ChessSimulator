@@ -6,12 +6,12 @@ public class PieceData : MonoBehaviour {
 	public string type;
 	public string color;
 	public GameObject MainSource;
-  public Vector3 CenterOfMass = new Vector3(0, -0.5f, 0);
 	public bool isMoving = false;
 	public GameObject Base;
 	public float distanceOfBase;
 
 	private string localColor;
+  private Vector3 CenterOfMass = new Vector3(0, -0.5f, 0);
 
 	void Setup () {
   	var rb = GetComponent<Rigidbody>();
@@ -19,7 +19,13 @@ public class PieceData : MonoBehaviour {
 	}
 
 	void Update() {
-		distanceOfBase = Vector3.Distance(transform.position, Base.transform.position);
+		if (Base == null) {
+			GetComponent<Rigidbody>().mass = 0.01f;
+		} else if (GetComponent<Rigidbody>().mass != 10) {
+			GetComponent<Rigidbody>().mass = 10;
+		}
+
+		distanceOfBase = Vector3.Distance(transform.position, getBasePosition());
 		if (localColor != color) {
 			localColor = color;
 			if (color == "white") {
@@ -52,6 +58,6 @@ public class PieceData : MonoBehaviour {
 		if (Base != null) {
 			return Base.transform.position;
 		}
-		return Vector3.zero;
+		return transform.position;
 	}
 }
