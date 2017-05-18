@@ -1,0 +1,72 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DetectorData : MonoBehaviour {
+	public int row;
+	public int column;
+	public bool acceptsMove = false;
+
+	public GameObject MainSource;
+
+	void OnTriggerEnter(Collider piece) {
+		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
+		var pieceData = piece.GetComponent<PieceData>();
+		var detectors = MainInstantiation.detectors;
+		var activeDetector = MainInstantiation.activeDetector;
+
+		if (acceptsMove && piece.gameObject == MainInstantiation.activePiece) {
+			for (int i = 0; i < detectors.GetLength(0); i++) {
+				for (int j = 0; j < detectors.GetLength(0); j++) {
+					detectors[i, j].GetComponent<DetectorData>().acceptsMove = false;
+				}
+			}
+			// Set New Base To The Piece and Add It To The Board
+			MainInstantiation.board[column, row] = piece.gameObject;
+			piece.GetComponent<PieceData>().Base = transform.gameObject;
+			// Remove Old Position -TODO Remove Board to Captured Piece
+			MainInstantiation.activePiece = null;
+			MainInstantiation.board[activeDetector.GetComponent<DetectorData>().column,
+			 												activeDetector.GetComponent<DetectorData>().row] = null;
+			activeDetector = null;
+		}
+  }
+
+	void OnTriggerExit(Collider piece) {
+		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
+		var pieceData = piece.GetComponent<PieceData>();
+		var detectors = MainInstantiation.detectors;
+
+		if (MainInstantiation.activePiece == null) {
+			MainInstantiation.activePiece = piece.gameObject;
+			int[,] posibleMoves = MainInstantiation.getPosibleMoves(pieceData.type, pieceData.color, column, row);
+
+			// Check IF There's Possible Moves
+			if (posibleMoves == null) {
+				MainInstantiation.activePiece = null;
+				return;
+			}
+
+			MainInstantiation.activeDetector = transform.gameObject;
+			for (var i = 0; i < posibleMoves.GetLength(0); i++) {
+				// Find Detectors Within Posible Moves
+				if (MainInstantiation.numberInBoard(posibleMoves[i, 0], posibleMoves[i, 1])) {
+					detectors[posibleMoves[i, 0], posibleMoves[i, 1]].GetComponent<DetectorData>().acceptsMove = true;
+				}
+			}
+		}
+  }
+
+	void Update() {
+		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
+		if (!acceptsMove) {
+			if ((row + column) % 2 != 0) {
+				GetComponent<Renderer>().material = MainInstantiation.WoodTexture;
+			} else {
+				GetComponent<Renderer>().material = MainInstantiation.CoralTexture;
+			}
+		} else if (acceptsMove) {
+			GetComponent<Renderer>().material = MainInstantiation.JadeTexture;
+		}
+	}
+}
