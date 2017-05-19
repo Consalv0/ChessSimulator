@@ -8,7 +8,7 @@ public class PieceData : MonoBehaviour {
 	public GameObject MainSource;
 	public bool isMoving = false;
 	public GameObject Base;
-	
+
 	float distanceOfBase;
 	string localColor;
   Vector3 CenterOfMass = new Vector3(0, -0.5f, 0);
@@ -42,12 +42,6 @@ public class PieceData : MonoBehaviour {
 		}
 
 		if (distanceOfBase > 1.5f && isMoving == false && Base != null) {
-			transform.position = getBasePosition();
-			transform.rotation = Quaternion.identity;
-			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
-		}
-
-		if (distanceOfBase > 14 && Base == null) {
 			transform.position = getBasePosition();
 			transform.rotation = Quaternion.identity;
 			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
