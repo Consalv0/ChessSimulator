@@ -7,10 +7,10 @@ public class DetectorData : MonoBehaviour {
 	public int column;
 	public bool acceptsMove = false;
 	public GameObject assignedPiece;
-
 	public GameObject MainSource;
 
 	void OnTriggerEnter(Collider piece) {
+		if (piece.GetComponent<PieceData>() == null) return;
 		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
 		var detectors = MainInstantiation.detectors;
 		var activeDetector = MainInstantiation.activeDetector;
@@ -42,6 +42,7 @@ public class DetectorData : MonoBehaviour {
   }
 
 	void OnTriggerExit(Collider piece) {
+		if (piece.GetComponent<PieceData>() == null) return;
 		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
 		var pieceData = piece.GetComponent<PieceData>();
 		var detectors = MainInstantiation.detectors;

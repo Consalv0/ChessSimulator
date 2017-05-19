@@ -165,11 +165,11 @@ public class Instantiation : MonoBehaviour {
 		return "NaN";
 	}
 
-	public string isWhite(string piece) {
-		if (piece == "white") {
+	public string isWhite(string color) {
+		if (color == "white") {
 			return "true";
 		}
-		if (piece == "black") {
+		if (color == "black") {
 			return "false";
 		}
 

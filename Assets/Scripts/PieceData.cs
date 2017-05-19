@@ -8,10 +8,10 @@ public class PieceData : MonoBehaviour {
 	public GameObject MainSource;
 	public bool isMoving = false;
 	public GameObject Base;
-	public float distanceOfBase;
-
-	private string localColor;
-  private Vector3 CenterOfMass = new Vector3(0, -0.5f, 0);
+	
+	float distanceOfBase;
+	string localColor;
+  Vector3 CenterOfMass = new Vector3(0, -0.5f, 0);
 
 	void Setup () {
   	var rb = GetComponent<Rigidbody>();
