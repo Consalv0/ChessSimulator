@@ -8,10 +8,11 @@ public class PieceData : MonoBehaviour {
 	public GameObject MainSource;
 	public bool isMoving = false;
 	public GameObject Base;
+    public bool isPicked = false;
 
 	float distanceOfBase;
 	string localColor;
-  Vector3 CenterOfMass = new Vector3(0, -0.5f, 0);
+    Vector3 CenterOfMass = new Vector3(0, -0.5f, 0);
 
 	void Setup () {
   	var rb = GetComponent<Rigidbody>();
@@ -41,7 +42,7 @@ public class PieceData : MonoBehaviour {
 			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}
 
-		if (distanceOfBase > 1.5f && isMoving == false && Base != null) {
+		if (distanceOfBase > 1.5f && isMoving == false && Base != null && !Base.GetComponent<DetectorData>().acceptsMove) {
 			transform.position = getBasePosition();
 			transform.rotation = Quaternion.identity;
 			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -52,6 +53,9 @@ public class PieceData : MonoBehaviour {
 		} else {
 			isMoving = false;
 		}
+
+        if (isPicked)
+          transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
 	}
 
 	public Vector3 getBasePosition() {

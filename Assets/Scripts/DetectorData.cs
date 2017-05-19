@@ -9,8 +9,9 @@ public class DetectorData : MonoBehaviour {
 	public GameObject assignedPiece;
 	public GameObject MainSource;
 
-	void OnTriggerEnter(Collider piece) {
+	void OnTriggerStay(Collider piece) {
 		if (piece.GetComponent<PieceData>() == null) return;
+        if (piece.GetComponent<PieceData>().isPicked) return;
 		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
 		var detectors = MainInstantiation.detectors;
 		var activeDetector = MainInstantiation.activeDetector;
@@ -27,7 +28,7 @@ public class DetectorData : MonoBehaviour {
 			// Remove Old Position
 			MainInstantiation.activePiece = null;
 			MainInstantiation.board[activeDetector.GetComponent<DetectorData>().column,
-			 												activeDetector.GetComponent<DetectorData>().row] = null;
+			 						activeDetector.GetComponent<DetectorData>().row] = null;
 			activeDetector.GetComponent<DetectorData>().assignedPiece = null;
 			activeDetector = null;
 			// Remove Board to Captured Piece
@@ -43,7 +44,8 @@ public class DetectorData : MonoBehaviour {
 
 	void OnTriggerExit(Collider piece) {
 		if (piece.GetComponent<PieceData>() == null) return;
-		Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
+        if (!piece.GetComponent<PieceData>().isPicked) return;
+        Instantiation MainInstantiation = MainSource.GetComponent<Instantiation>();
 		var pieceData = piece.GetComponent<PieceData>();
 		var detectors = MainInstantiation.detectors;
 
