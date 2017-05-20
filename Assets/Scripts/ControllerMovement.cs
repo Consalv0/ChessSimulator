@@ -7,7 +7,6 @@ public class ControllerMovement : MonoBehaviour {
 	public float SprintMultiplier = 1.6f;
 	public float Sensitivity = 5f;
 	public float Smoothing = 2f;
-	public Transform Soul;
 
 	Vector2 deltaMovement;
 	Vector2 smoothV;
@@ -29,11 +28,11 @@ public class ControllerMovement : MonoBehaviour {
 				sprint = SprintMultiplier;
 		}
 
-		x = Input.GetAxis("Horizontal") * Time.deltaTime * MovementSpeed * SprintMultiplier / sprint;
-		z = Input.GetAxis("Vertical") * Time.deltaTime * MovementSpeed * SprintMultiplier / sprint;
+		x = Input.GetAxis("Left Horizontal") * Time.deltaTime * MovementSpeed * SprintMultiplier / sprint;
+		z = Input.GetAxis("Left Vertical") * Time.deltaTime * MovementSpeed * SprintMultiplier / sprint;
 
 		// Rotation
-		var mouseDirection = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+		var mouseDirection = new Vector2(Input.GetAxis("Right Horizontal"), Input.GetAxis("Right Vertical"));
 
 		mouseDirection = Vector2.Scale(mouseDirection, new Vector2(Sensitivity * Smoothing, Sensitivity * Smoothing));
 		smoothV.x = Mathf.Lerp(smoothV.x, mouseDirection.x, 1 / Smoothing);
@@ -44,7 +43,8 @@ public class ControllerMovement : MonoBehaviour {
     transform.Translate(x, 0, 0);
     transform.Translate(0, 0, z);
 		Vector3 newPos = transform.position + transform.forward * 5;
-		Soul.position = newPos;
+		if (GetComponent<GrabItems>().pickedElement != null)
+			GetComponent<GrabItems>().pickedElement.transform.position = newPos;
 		transform.rotation = Quaternion.Euler(-deltaMovement.y, deltaMovement.x, 0);
 	}
 }

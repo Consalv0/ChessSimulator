@@ -214,7 +214,9 @@ public class Instantiation : MonoBehaviour {
 			}
 			// Doble Step IF Inicial Position
 			if (x == 1) {
-				moves[3,0] = 2 + x; moves[3,1] = 0 + y;
+				if (moves[0,0] != -1 || board[0 + y, 1 + x] == null) {
+					moves[3,0] = 2 + x; moves[3,1] = 0 + y;
+				}
 			}
 		}
 
@@ -244,7 +246,9 @@ public class Instantiation : MonoBehaviour {
 			}
 			// Doble Step IF Inicial Position
 			if (x == 6) {
-				moves[3,0] = -2 + x; moves[3,1] = 0 + y;
+				if (moves[0,0] != -1 || board[0 + y, -1 + x] == null) {
+					moves[3,0] = -2 + x; moves[3,1] = 0 + y;
+				}
 			}
 		}
 
