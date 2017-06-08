@@ -5,7 +5,7 @@ using UnityEngine;
 public class PieceData : MonoBehaviour {
 	public string type;
 	public string color;
-	public GameObject MainSource;
+	public GameObject mainSource;
 	public bool isMoving = false;
 	public GameObject Base;
   public bool isPicked = false;
@@ -23,9 +23,9 @@ public class PieceData : MonoBehaviour {
 		if (localColor != color) {
 			localColor = color;
 			if (color == "white") {
-				GetComponent<Renderer>().material = MainSource.GetComponent<Instantiation>().WhiteTexture;
+				GetComponent<Renderer>().material = mainSource.GetComponent<Instantiation>().WhiteTexture;
 			} else {
-				GetComponent<Renderer>().material = MainSource.GetComponent<Instantiation>().BlackTexture;
+				GetComponent<Renderer>().material = mainSource.GetComponent<Instantiation>().BlackTexture;
 			}
 		}
 
@@ -48,7 +48,7 @@ public class PieceData : MonoBehaviour {
 			transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}
 
-		if (transform.gameObject == MainSource.GetComponent<Instantiation>().activePiece) {
+		if (transform.gameObject == mainSource.GetComponent<Instantiation>().activePiece) {
 			GetComponent<Rigidbody>().mass = 100;
 			isMoving = true;
 		} else {

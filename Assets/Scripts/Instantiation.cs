@@ -44,7 +44,7 @@ public class Instantiation : MonoBehaviour {
 				var currentClone = Instantiate(MatrixDetector, new Vector3(-10.5f + x * 3, -0.45f, -10.5f + y * 3), Quaternion.identity);
 				currentClone.GetComponent<DetectorData>().row = y;
 				currentClone.GetComponent<DetectorData>().column = x;
-				currentClone.GetComponent<DetectorData>().MainSource = this.gameObject;
+				currentClone.GetComponent<DetectorData>().mainInstantiation = this;
 				detectors[y, x] = currentClone;
 			}
 		}
@@ -90,7 +90,7 @@ public class Instantiation : MonoBehaviour {
 	public void setPieceData(GameObject piece, string type, string color) {
 		piece.GetComponent<PieceData>().type = type;
 		piece.GetComponent<PieceData>().color = color;
-		piece.GetComponent<PieceData>().MainSource = this.gameObject;
+		piece.GetComponent<PieceData>().mainSource = gameObject;
 	}
 
 	public void setPieces() {
