@@ -6,9 +6,18 @@ public class ResetPosition : MonoBehaviour {
 	public Vector3 position = new Vector3(0, 0, 0);
 
 	void OnTriggerExit(Collider element) {
-		element.transform.position = position;
 		if (element.GetComponent<Rigidbody>() != null) {
-			element.GetComponent<Rigidbody>().velocity = Vector3.zero;
+			if (element.GetComponent<PieceData>() != null) {
+				if (element.GetComponent<PieceData>().Base != null) {
+					element.transform.position = position;
+					element.GetComponent<Rigidbody>().velocity = Vector3.zero;
+				}
+			} else {
+				element.transform.position = position;
+				element.GetComponent<Rigidbody>().velocity = Vector3.zero;
+			}
+		} else {
+			element.transform.position = position;
 		}
 	}
 }

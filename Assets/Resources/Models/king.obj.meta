@@ -7,12 +7,18 @@ ModelImporter:
   fileIDToRecycleName:
     100000: default
     100002: //RootNode
+    100004: Boole
     400000: default
     400002: //RootNode
+    400004: Boole
     2300000: default
+    2300002: Boole
     3300000: default
+    3300002: Boole
     4300000: default
+    4300002: Boole
     6400000: default
+    6400002: Boole
   materials:
     importMaterials: 0
     materialName: 0
@@ -23,6 +29,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 

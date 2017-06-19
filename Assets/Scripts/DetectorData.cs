@@ -16,6 +16,12 @@ public class DetectorData : MonoBehaviour {
 		var detectors = mainInstantiation.detectors;
 		var activeDetector = mainInstantiation.activeDetector;
 
+		Vector3 random = new Vector3(Random.Range(-2, 2), Random.value, Random.Range(-2, 2));
+		if (piece.GetComponent<PieceData>().Base == null) {
+			piece.GetComponent<Rigidbody>().AddExplosionForce(0.1f, transform.position + random, 100, 1, ForceMode.Impulse);
+			piece.GetComponent<Rigidbody>().AddTorque(random * 0.5f, ForceMode.Impulse);
+		}
+
 		if (acceptsMove && piece.gameObject == mainInstantiation.activePiece) {
 			for (int i = 0; i < detectors.GetLength(0); i++) {
 				for (int j = 0; j < detectors.GetLength(0); j++) {
@@ -35,11 +41,22 @@ public class DetectorData : MonoBehaviour {
 				assignedPiece = piece.gameObject;
 			} else if (piece.gameObject != assignedPiece) {
 				assignedPiece.GetComponent<PieceData>().Base = null;
-				assignedPiece = piece.gameObject;
+				if (assignedPiece.GetComponent<PieceData>().type == "king") {
+					StartCoroutine(WaitToRestart(assignedPiece.GetComponent<PieceData>().color));
+				} else {
+					assignedPiece = piece.gameObject;
+				}
 			}
 			mainInstantiation.turn = !mainInstantiation.turn;
 		}
   }
+
+	IEnumerator WaitToRestart(string color) {
+		StartCoroutine(mainInstantiation.ClearBases(color));
+		yield return new WaitForSeconds(10);
+		mainInstantiation.Restart();
+		yield break;
+	}
 
 	void OnTriggerExit(Collider piece) {
 		if (piece.GetComponent<PieceData>() == null) return;
@@ -80,6 +97,14 @@ public class DetectorData : MonoBehaviour {
 			}
 		} else if (acceptsMove) {
 			GetComponent<Renderer>().material = mainInstantiation.JadeTexture;
+		}
+		if (row == 0 || row == 7) {
+			if (assignedPiece != null)
+				if (assignedPiece.GetComponent<PieceData>().type == "pawn") {
+					assignedPiece.GetComponent<PieceData>().type = "queen";
+					assignedPiece.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Models/Queen", typeof(Mesh));
+					assignedPiece.GetComponent<MeshCollider>().sharedMesh = (Mesh)Resources.Load("Models/Queen", typeof(Mesh));
+				}
 		}
 	}
 }

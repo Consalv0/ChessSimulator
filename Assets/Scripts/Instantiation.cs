@@ -35,7 +35,23 @@ public class Instantiation : MonoBehaviour {
 
 		placeDetectors();
 		setPieces();
-		placePieces();
+		StartCoroutine(placePieces());
+	}
+
+	public IEnumerator ClearBases(string color) {
+		foreach(GameObject detector in detectors) {
+			if (detector.GetComponent<DetectorData>().assignedPiece != null) {
+				if (detector.GetComponent<DetectorData>().assignedPiece.GetComponent<PieceData>().color == color) {
+					yield return new WaitForSeconds(0.1f);
+					detector.GetComponent<DetectorData>().assignedPiece.GetComponent<PieceData>().Base = null;
+				}
+			}
+		}
+		yield break;
+	}
+
+	public void Restart() {
+		StartCoroutine(placePieces());
 	}
 
 	public void placeDetectors() {
@@ -50,7 +66,7 @@ public class Instantiation : MonoBehaviour {
 		}
 	}
 
-	public void placePieces() {
+	public IEnumerator placePieces() {
 		// Clean Board
 		for (var i = 0; i < board.GetLength(0); i++) {
 			for (var j = 0; j < board.GetLength(1); j++) {
@@ -64,27 +80,47 @@ public class Instantiation : MonoBehaviour {
 					whitePieces[j].transform.position = detectors[i, j].transform.position;
 					board[j, i] = whitePieces[j];
 					whitePieces[j].GetComponent<PieceData>().Base = detectors[i, j];
+					whitePieces[j].GetComponent<Rigidbody>().velocity = Vector3.zero;
 					detectors[i, j].GetComponent<DetectorData>().assignedPiece = whitePieces[j];
+					if (whitePieces[j].GetComponent<PieceData>().type != "pawn") {
+						whitePieces[j].GetComponent<PieceData>().type = "pawn";
+						whitePieces[j].GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Models/Pawn", typeof(Mesh));
+						whitePieces[j].GetComponent<MeshCollider>().sharedMesh = (Mesh)Resources.Load("Models/Pawn", typeof(Mesh));
+					}
+					yield return new WaitForSeconds(0.1f);
 				}
 				if (i == 0) {
 					whitePieces[j + 8].transform.position = detectors[i, j].transform.position;
 					board[j, i] = whitePieces[j + 8];
 					whitePieces[j + 8].GetComponent<PieceData>().Base = detectors[i, j];
+					whitePieces[j + 8].GetComponent<Rigidbody>().velocity = Vector3.zero;
 					detectors[i, j].GetComponent<DetectorData>().assignedPiece = whitePieces[j + 8];
+					yield return new WaitForSeconds(0.1f);
 				}
 				if (i == 6) {
 					blackPieces[j].transform.position = detectors[i, j].transform.position;
 					board[j, i] = blackPieces[j];
 					blackPieces[j].GetComponent<PieceData>().Base = detectors[i, j];
+					blackPieces[j].GetComponent<Rigidbody>().velocity = Vector3.zero;
 					detectors[i, j].GetComponent<DetectorData>().assignedPiece = blackPieces[j];
+					if (blackPieces[j].GetComponent<PieceData>().type != "pawn") {
+						blackPieces[j].GetComponent<PieceData>().type = "pawn";
+						blackPieces[j].GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Models/Pawn", typeof(Mesh));
+						blackPieces[j].GetComponent<MeshCollider>().sharedMesh = (Mesh)Resources.Load("Models/Pawn", typeof(Mesh));
+					}
+					yield return new WaitForSeconds(0.1f);
 				}
 				if (i == 7) {
 					blackPieces[j + 8].transform.position = detectors[i, j].transform.position;
 					board[j, i] = blackPieces[j + 8];
 					blackPieces[j + 8].GetComponent<PieceData>().Base = detectors[i, j];
+					blackPieces[j + 8].GetComponent<Rigidbody>().velocity = Vector3.zero;
 					detectors[i, j].GetComponent<DetectorData>().assignedPiece = blackPieces[j + 8];
+					yield return new WaitForSeconds(0.1f);
 				}
-		} }
+			}
+		}
+		yield break;
 	}
 
 	public void setPieceData(GameObject piece, string type, string color) {
@@ -214,8 +250,9 @@ public class Instantiation : MonoBehaviour {
 			}
 			// Doble Step IF Inicial Position
 			if (x == 1) {
-				if (moves[0,0] != -1 || board[0 + y, 1 + x] == null) {
-					moves[3,0] = 2 + x; moves[3,1] = 0 + y;
+				if (moves[0, 0] != -1 || board[0 + y, 1 + x] == null) {
+					if (board[0 + y, 2 + x] == null)
+						moves[3,0] = 2 + x; moves[3,1] = 0 + y;
 				}
 			}
 		}
@@ -247,7 +284,8 @@ public class Instantiation : MonoBehaviour {
 			// Doble Step IF Inicial Position
 			if (x == 6) {
 				if (moves[0,0] != -1 || board[0 + y, -1 + x] == null) {
-					moves[3,0] = -2 + x; moves[3,1] = 0 + y;
+					if (board[0 + y, -2 + x] == null)
+						moves[3,0] = -2 + x; moves[3, 1] = 0 + y;
 				}
 			}
 		}
